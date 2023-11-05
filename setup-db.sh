@@ -4,7 +4,7 @@ DATA_PATH="$(cd "$(dirname "$1")"; pwd)/$(basename "$1")data/"
 USER=vzalygin
 PASSWORD=12345678
 DB_NAME=demo
-INIT=demo-small-20170815.sql
+INIT=./lab1/demo-small-20170815.sql
 
 docker run \
     --name postgres-stand -p 5432:5432 \
