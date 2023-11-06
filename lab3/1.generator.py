@@ -13,7 +13,7 @@ to_calendar = lambda x: str(100+x)[1:]
 
 def make_owners():
     class owner():
-        def __init__(self, name, last_name) -> None:
+        def __init__(self, name, last_name):
             self.id = uuid()
             self.name = name
             self.last_name = last_name
@@ -59,7 +59,7 @@ def make_buildings():
 
 def make_apartaments(owners, buildings):
     class apartament():
-        def __init__(self, number, building, owner) -> None:
+        def __init__(self, number, building, owner):
             self.id = uuid()
             self.number = number
             self.building = building
@@ -78,7 +78,7 @@ def make_apartaments(owners, buildings):
 
 def make_service_types():
     class service_type():
-        def __init__(self, description, has_counter, price_per_month) -> None:
+        def __init__(self, description, has_counter, price_per_month):
             self.id = uuid()
             self.description = description
             self.has_counter = has_counter
@@ -105,7 +105,7 @@ def make_payments(service_types, apartaments):
     rand_date = lambda: f"{rand_range(2000, 2023)}-{to_calendar(rand_range(1, 13))}-{to_calendar(rand_range(1, 29))}"
 
     class payment():
-        def __init__(self, payment_date, apartament, services) -> None:
+        def __init__(self, payment_date, apartament, services):
             self.id = uuid()
             self.payment_date = payment_date
             self.period = year_montgh(payment_date)
