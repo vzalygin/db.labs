@@ -69,10 +69,12 @@ def make_apartaments(owners, buildings):
             jsonb = "{ \"street\": \"" + str(self.building.street) + "\", \"house_number\": \"" + str(self.building.number) + "\", \"apartament_number\": \"" + str(self.number) + "\" }"
             return f"INSERT INTO public.apartaments VALUES ('{self.id}', '{self.number}', '{jsonb}', '{self.building.id}', '{self.owner.id}');"
 
-    return list(set(
-        apartament(rand_range(1, 1_000), choice(buildings), choice(owners))
-        for _ in range(1_500_000)
-    ))
+    a = []
+    for i in range(1_000_000):
+        if (i % 100_000 == 0):
+            print(i)
+            a.append(apartament(rand_range(1, 1_000), choice(buildings), choice(owners)))
+    return a
 
 def make_service_types():
     class service_type():
@@ -114,11 +116,13 @@ def make_payments(service_types, apartaments):
             price = sum(x.price_per_month for x in self.services)
             uuids = "{" + ', '.join(x.id for x in self.services) +  "}"
             return f"INSERT INTO public.payments VALUES ('{self.id}', '{self.period}', '{self.payment_date}', '{price}', '{uuids}'::uuid[], '{self.apartament_id}');"
+    a = []
+    for i in range(10_000_000):
+        if (i % 100_000 == 0):
+            print(i)
+        a.append(payment(rand_date(), choice(apartaments), sample(service_types, rand_range(1, 11))))
 
-    return list(set(
-        payment(rand_date(), choice(apartaments), sample(service_types, rand_range(1, 11)))
-        for _ in range(101_000_000)
-    ))
+    return a
 
 def apply_progress(arr, name):
     print(f'generated {len(arr)} rows for {name};')
@@ -131,10 +135,9 @@ service_types = apply_progress(make_service_types(), "service_types")
 payments = apply_progress(make_payments(service_types, apartaments), "payments")
 
 with open("lab3.1.fill.sql", "w", encoding="utf-8") as f:
-    res = '\n'.join([x.insert_query() for x in owners]) + "\n" + \
-        '\n'.join([x.insert_query() for x in buildings]) + "\n" + \
-        '\n'.join([x.insert_query() for x in apartaments]) + "\n" + \
-        '\n'.join([x.insert_query() for x in service_types]) + "\n" + \
-        '\n'.join([x.insert_query() for x in payments]) + "\n"
-    # print(res)
-    f.write(res)
+    for xx in [owners, buildings, service_types, apartaments, payments]:
+        print(f"prepare {len(xx)} inserts")
+        for i, x in enumerate(xx):
+            if(i % 100_000 == 0):
+                print(i)
+            f.write(x.insert_query()+"\n")
