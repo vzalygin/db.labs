@@ -2,6 +2,9 @@
 
 import random
 
+APARTAMENTS_COUNT = 1_000_000
+PAYMENTS_COUNT = 5_000_000
+
 def uuid():
     import uuid
     return str(uuid.uuid4())
@@ -70,10 +73,10 @@ def make_apartaments(owners, buildings):
             return f"INSERT INTO public.apartaments VALUES ('{self.id}', '{self.number}', '{jsonb}', '{self.building.id}', '{self.owner.id}');"
 
     a = []
-    for i in range(1_000_000):
+    for i in range(APARTAMENTS_COUNT):
         if (i % 100_000 == 0):
             print(i)
-            a.append(apartament(rand_range(1, 1_000), choice(buildings), choice(owners)))
+        a.append(apartament(rand_range(1, 1_000), choice(buildings), choice(owners)))
     return a
 
 def make_service_types():
@@ -117,7 +120,7 @@ def make_payments(service_types, apartaments):
             uuids = "{" + ', '.join(x.id for x in self.services) +  "}"
             return f"INSERT INTO public.payments VALUES ('{self.id}', '{self.period}', '{self.payment_date}', '{price}', '{uuids}'::uuid[], '{self.apartament_id}');"
     a = []
-    for i in range(10_000_000):
+    for i in range(PAYMENTS_COUNT):
         if (i % 100_000 == 0):
             print(i)
         a.append(payment(rand_date(), choice(apartaments), sample(service_types, rand_range(1, 11))))
