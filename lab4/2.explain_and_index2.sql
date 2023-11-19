@@ -10,7 +10,7 @@ from payments
 join apartaments on apartaments.id = payments.apartament_id
 where apartaments.full_address->>'street' = 'улица Льва Толстого' and payments.price > 3000;
 
-create index on apartaments (full_address);
+create index on payments (price);
 
 explain
 select *
